@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <modules>
+        <module>002-p2p-common</module>
+        <module>004-p2p-dadaservice</module>
+        <module>005-p2p-web</module>
+        <module>003-p2p-exterface</module>
+        <module>006-p2p-timer</module>
+
+    </modules>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.6.0</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+   <packaging>pom</packaging>
+    <groupId>com.com.bjpowernode</groupId>
+    <artifactId>001-p2p-parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+ <dependencyManagement>
+     <dependencies>
+         <dependency>
+             <groupId>com.com.bjpowernode</groupId>
+             <artifactId>003-p2p-exterface</artifactId>
+             <version>0.0.1-SNAPSHOT</version>
+         </dependency>
+     </dependencies>
+ </dependencyManagement>
+
+</project>

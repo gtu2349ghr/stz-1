@@ -1,0 +1,583 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+	<HEAD>
+		<TITLE>love</TITLE>
+		<META NAME="Generator" CONTENT="EditPlus">
+		<META NAME="Author" CONTENT="">
+		<META NAME="Keywords" CONTENT="">
+		<META NAME="Description" CONTENT="">
+		<META CHARSET="UTF-8">
+			
+		<style>
+			html,
+			
+			body {
+				height: 100%;
+				padding: 0;
+				margin: 0;
+				background: #000;
+			}
+
+			canvas {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+			}
+			audio {
+				display: none;
+			}
+			
+				.snow{
+					background: white;
+					position: absolute;
+					width: 20px;
+					height: 20px;
+					border-radius: 50%;
+				}
+				.textSt{
+					width: 500px;
+					height: 500px;
+					display: block;
+					margin: 0 auto;
+				}
+				canvas{
+      position: absolute;
+      z-index: 0;
+    }
+
+      #pinkboard,.textst {
+        animation: anim 1.5s ease-in-out infinite;
+        -webkit-animation: anim 1.5s ease-in-out infinite;
+        -o-animation: anim 1.5s ease-in-out infinite;
+        -moz-animation: anim 1.5s ease-in-out infinite;
+      }
+
+	@keyframes anim {
+        0% {
+          transform: scale(0.8);
+        }
+        25% {
+          transform: scale(0.7);
+        }
+        50% {
+          transform: scale(1);
+        }
+        75% {
+          transform: scale(0.7);
+        }
+        100% {
+          transform: scale(0.8);
+        }
+      }
+      @-webkit-keyframes anim {
+        0% {
+          -webkit-transform: scale(0.8);
+        }
+        25% {
+          -webkit-transform: scale(0.7);
+        }
+        50% {
+          -webkit-transform: scale(1);
+        }
+        75% {
+          -webkit-transform: scale(0.7);
+        }
+        100% {
+          -webkit-transform: scale(0.8);
+        }
+      }
+      @-o-keyframes anim {
+        0% {
+          -o-transform: scale(0.8);
+        }
+        25% {
+          -o-transform: scale(0.7);
+        }
+        50% {
+          -o-transform: scale(1);
+        }
+        75% {
+          -o-transform: scale(0.7);
+        }
+        100% {
+          -o-transform: scale(0.8);
+        }
+      }
+      @-moz-keyframes anim {
+        0% {
+          -moz-transform: scale(0.8);
+        }
+        25% {
+          -moz-transform: scale(0.7);
+        }
+        50% {
+          -moz-transform: scale(1);
+        }
+        75% {
+          -moz-transform: scale(0.7);
+        }
+        100% {
+          -moz-transform: scale(0.8);
+        }
+      }
+      #name {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        margin-top: -20px;
+        font-size: 46px;
+        color: #ea80b0;
+      }
+		
+		</style>
+	</HEAD>
+
+	<BODY>
+
+		<div class="textst" style="position: fixed;z-index: 1;;display: flex;justify-content:center;align-items:center;width:100%;height: 100%;">
+			<div  style="font-family: '华文行楷';font-size: 50px;color: aliceblue;">为爱冲锋</div>
+		</div>
+	
+		<div class="header"><canvas id="canvas"></canvas>
+			
+		</div>
+		<canvas id="pinkboard"></canvas>
+		
+		
+		<audio id="music" autoplay="autoplay" controls="controls"loop="loop" preload="auto"
+		            src="http://music.163.com/song/media/outer/url?id=31365604.mp3">
+		</audio>
+
+		<script>
+			window.onload = function(){
+				setInterval("toggleSound()",1);
+
+				
+			}
+			function toggleSound() {
+				var music = document.getElementById("music");//获取ID  
+				if (music.paused) { //判读是否播放  
+					music.paused=false;
+					music.play(); //没有就播放 
+				}    
+			}
+			//--创建页面监听，等待微信端页面加载完毕 触发音频播放
+			document.addEventListener('DOMContentLoaded', function () {
+				function audioAutoPlay() {
+					var audio = document.getElementById('music');
+						audio.play();
+					document.addEventListener("WeixinJSBridgeReady", function () {
+						audio.play();
+					}, false);
+				}
+				audioAutoPlay();
+			});
+			//--创建触摸监听，当浏览器打开页面时，触摸屏幕触发事件，进行音频播放
+			document.addEventListener('touchstart', function () {
+				function audioAutoPlay() {
+					var audio = document.getElementById('music');
+						audio.play();
+				}
+				audioAutoPlay();
+			});
+			/*
+			 * Settings
+			 */
+			var settings = {
+				particles: {
+					length: 500, // maximum amount of particles
+					duration: 2, // particle duration in sec
+					velocity: 100, // particle velocity in pixels/sec
+					effect: -0.75, // play with this for a nice effect
+					size: 30, // particle size in pixels
+				},
+			};
+
+			/*
+			 * RequestAnimationFrame polyfill by Erik Möller
+			 */
+			(function() {
+				var b = 0;
+				var c = ["ms", "moz", "webkit", "o"];
+				for (var a = 0; a < c.length && !window.requestAnimationFrame; ++a) {
+					window.requestAnimationFrame = window[c[a] + "RequestAnimationFrame"];
+					window.cancelAnimationFrame = window[c[a] + "CancelAnimationFrame"] || window[c[a] +
+						"CancelRequestAnimationFrame"]
+				}
+				if (!window.requestAnimationFrame) {
+					window.requestAnimationFrame = function(h, e) {
+						var d = new Date().getTime();
+						var f = Math.max(0, 16 - (d - b));
+						var g = window.setTimeout(function() {
+							h(d + f)
+						}, f);
+						b = d + f;
+						return g
+					}
+				}
+				if (!window.cancelAnimationFrame) {
+					window.cancelAnimationFrame = function(d) {
+						clearTimeout(d)
+					}
+				}
+			}());
+
+			/*
+			 * Point class
+			 */
+			var Point = (function() {
+				function Point(x, y) {
+					this.x = (typeof x !== 'undefined') ? x : 0;
+					this.y = (typeof y !== 'undefined') ? y : 0;
+				}
+				Point.prototype.clone = function() {
+					return new Point(this.x, this.y);
+				};
+				Point.prototype.length = function(length) {
+					if (typeof length == 'undefined')
+						return Math.sqrt(this.x * this.x + this.y * this.y);
+					this.normalize();
+					this.x *= length;
+					this.y *= length;
+					return this;
+				};
+				Point.prototype.normalize = function() {
+					var length = this.length();
+					this.x /= length;
+					this.y /= length;
+					return this;
+				};
+				return Point;
+			})();
+
+			/*
+			 * Particle class
+			 */
+			var Particle = (function() {
+				function Particle() {
+					this.position = new Point();
+					this.velocity = new Point();
+					this.acceleration = new Point();
+					this.age = 0;
+				}
+				Particle.prototype.initialize = function(x, y, dx, dy) {
+					this.position.x = x;
+					this.position.y = y;
+					this.velocity.x = dx;
+					this.velocity.y = dy;
+					this.acceleration.x = dx * settings.particles.effect;
+					this.acceleration.y = dy * settings.particles.effect;
+					this.age = 0;
+				};
+				Particle.prototype.update = function(deltaTime) {
+					this.position.x += this.velocity.x * deltaTime;
+					this.position.y += this.velocity.y * deltaTime;
+					this.velocity.x += this.acceleration.x * deltaTime;
+					this.velocity.y += this.acceleration.y * deltaTime;
+					this.age += deltaTime;
+				};
+				Particle.prototype.draw = function(context, image) {
+					function ease(t) {
+						return (--t) * t * t + 1;
+					}
+					var size = image.width * ease(this.age / settings.particles.duration);
+					context.globalAlpha = 1 - this.age / settings.particles.duration;
+					context.drawImage(image, this.position.x - size / 2, this.position.y - size / 2, size, size);
+				};
+				return Particle;
+			})();
+
+			/*
+			 * ParticlePool class
+			 */
+			var ParticlePool = (function() {
+				var particles,
+					firstActive = 0,
+					firstFree = 0,
+					duration = settings.particles.duration;
+
+				function ParticlePool(length) {
+					// create and populate particle pool
+					particles = new Array(length);
+					for (var i = 0; i < particles.length; i++)
+						particles[i] = new Particle();
+				}
+				ParticlePool.prototype.add = function(x, y, dx, dy) {
+					particles[firstFree].initialize(x, y, dx, dy);
+
+					// handle circular queue
+					firstFree++;
+					if (firstFree == particles.length) firstFree = 0;
+					if (firstActive == firstFree) firstActive++;
+					if (firstActive == particles.length) firstActive = 0;
+				};
+				ParticlePool.prototype.update = function(deltaTime) {
+					var i;
+
+					// update active particles
+					if (firstActive < firstFree) {
+						for (i = firstActive; i < firstFree; i++)
+							particles[i].update(deltaTime);
+					}
+					if (firstFree < firstActive) {
+						for (i = firstActive; i < particles.length; i++)
+							particles[i].update(deltaTime);
+						for (i = 0; i < firstFree; i++)
+							particles[i].update(deltaTime);
+					}
+
+					// remove inactive particles
+					while (particles[firstActive].age >= duration && firstActive != firstFree) {
+						firstActive++;
+						if (firstActive == particles.length) firstActive = 0;
+					}
+
+
+				};
+				ParticlePool.prototype.draw = function(context, image) {
+					// draw active particles
+					if (firstActive < firstFree) {
+						for (i = firstActive; i < firstFree; i++)
+							particles[i].draw(context, image);
+					}
+					if (firstFree < firstActive) {
+						for (i = firstActive; i < particles.length; i++)
+							particles[i].draw(context, image);
+						for (i = 0; i < firstFree; i++)
+							particles[i].draw(context, image);
+					}
+				};
+				return ParticlePool;
+			})();
+
+			/*
+			 * Putting it all together
+			 */
+			(function(canvas) {
+				var context = canvas.getContext('2d'),
+					particles = new ParticlePool(settings.particles.length),
+					particleRate = settings.particles.length / settings.particles.duration, // particles/sec
+					time;
+					
+				// get point on heart with -PI <= t <= PI
+				function pointOnHeart(t) {
+					return new Point(
+						160 * Math.pow(Math.sin(t), 3),
+						130 * Math.cos(t) - 50 * Math.cos(2 * t) - 20 * Math.cos(3 * t) - 10 * Math.cos(4 * t) + 25
+					);
+				}
+
+				// creating the particle image using a dummy canvas
+				var image = (function() {
+					var canvas = document.createElement('canvas'),
+						context = canvas.getContext('2d');
+					canvas.width = settings.particles.size;
+					canvas.height = settings.particles.size;
+					
+					// helper function to create the path
+					function to(t) {
+						var point = pointOnHeart(t);
+						point.x = settings.particles.size / 2 + point.x * settings.particles.size / 350;
+						point.y = settings.particles.size / 2 - point.y * settings.particles.size / 350;
+						return point;
+					}
+					// create the path
+					context.beginPath();
+					var t = -Math.PI;
+					var point = to(t);
+					context.moveTo(point.x, point.y);
+					while (t < Math.PI) {
+						t += 0.01; // baby steps!
+						point = to(t);
+						context.lineTo(point.x, point.y);
+					}
+					context.closePath();
+					// create the fill
+					// context.fillStyle = '#ea80b0';
+					context.fillStyle = '#FF0000';
+					context.fill();
+					// create the image
+					var image = new Image();
+					image.src = canvas.toDataURL();
+					return image;
+				})();
+
+				// render that thing!
+				function render() {
+					// next animation frame
+					requestAnimationFrame(render);
+
+					// update time
+					var newTime = new Date().getTime() / 1000,
+						deltaTime = newTime - (time || newTime);
+					time = newTime;
+
+					// clear canvas
+					context.clearRect(0, 0, canvas.width, canvas.height);
+
+					// create new particles
+					var amount = particleRate * deltaTime;
+					for (var i = 0; i < amount; i++) {
+						var pos = pointOnHeart(Math.PI - 2 * Math.PI * Math.random());
+						var dir = pos.clone().length(settings.particles.velocity);
+						particles.add(canvas.width / 2 + pos.x, canvas.height / 2 - pos.y, dir.x, -dir.y);
+					}
+
+					// update and draw particles
+					particles.update(deltaTime);
+					particles.draw(context, image);
+				}
+
+				// handle (re-)sizing of the canvas
+				function onResize() {
+					canvas.width = canvas.clientWidth;
+					canvas.height = canvas.clientHeight;
+				}
+				window.onresize = onResize;
+
+				// delay rendering bootstrap
+				setTimeout(function() {
+					onResize();
+					render();
+				}, 10);
+			})(document.getElementById('pinkboard'));
+		</script>
+		    <script>
+				//获取屏幕宽高
+				var windowWidth = window.screen.width;
+				var windowHeight = window.screen.height;
+		 
+				//创建雪花
+				function createSnow(){
+					var left = 0;
+					var top = 0;
+		 
+					//定义一个初始化随机数,使雪花在屏幕中
+					var left_random = Math.random() * windowWidth;
+					var top_random = Math.random()* windowHeight;
+					var div = document.createElement('div');
+					div.innerHTML="<p style='color:#FFF'></p>"
+					div.className = 'snow';
+					div.style.transform = 'scale('+(Math.random())+')'
+		 
+					document.body.appendChild(div);
+		 
+					//雪花飘落
+					setInterval(function () {
+		 
+						div.style.left = left_random + left +'px';
+						div.style.top = top_random + top +'px'
+						left += 0.2;
+						top += 0.2;
+		 
+						//如果雪花跑到屏幕外面了,让雪花重新返回屏幕顶部
+						if(left_random + left >= windowWidth){
+							left_random = Math.random();
+							left = 0;
+						}
+		 
+						if(top_random + top >= windowHeight){
+							top_random = Math.random();
+							top = 0;
+						}
+					},10)
+		 
+				}
+				// for(var i = 0 ; i < 100 ; i++){
+				// 	createSnow()
+				// }
+			</script>
+	</BODY>
+	<script>
+		var canvas = document.getElementById('canvas'),
+		ctx = canvas.getContext('2d'),
+		w = canvas.width = window.innerWidth,
+		h = canvas.height = window.innerHeight,
+		
+		hue = 255;
+		function setcolor(){
+			hue=Math.round((Math.random()*254+1)+10)
+		}
+		setInterval(setcolor,2000);
+	
+		
+		stars = [],
+		count = 0,
+		maxStars = 3000;//星星数量
+		var canvas2 = document.createElement('canvas'),
+		ctx2 = canvas2.getContext('2d');
+		canvas2.width = 100;
+		canvas2.height = 100;
+		var half = canvas2.width / 2,
+		gradient2 = ctx2.createRadialGradient(half, half, 0, half, half, half);
+		gradient2.addColorStop(0.025, '#CCC');
+		gradient2.addColorStop(0.1, 'hsl(' + hue + ', 61%, 33%)');
+		gradient2.addColorStop(0.25, 'hsl(' + hue + ', 10%, 10%)');
+		gradient2.addColorStop(1, 'transparent');
+		ctx2.fillStyle = gradient2;
+		ctx2.beginPath();
+		ctx2.arc(half, half, half, 0, Math.PI * 2);
+		ctx2.fill();
+		// End cache
+		function random(min, max) {
+		if (arguments.length < 2) {
+		max = min;
+		min = 0;
+		}
+		if (min > max) {
+		var hold = max;
+		max = min;
+		min = hold;
+		}
+		return Math.floor(Math.random() * (max - min + 1)) + min;
+		}
+		function maxOrbit(x, y) {
+		var max = Math.max(x, y),
+		diameter = Math.round(Math.sqrt(max * max + max * max));
+		return diameter / 2;
+		//星星移动范围，值越大范围越小，
+		}
+		var Star = function() {
+		this.orbitRadius = random(maxOrbit(w, h));
+		this.radius = random(60, this.orbitRadius) / 8;
+		//星星大小
+		this.orbitX = w / 2;
+		this.orbitY = h / 2;
+		this.timePassed = random(0, maxStars);
+		this.speed = random(this.orbitRadius) / 50000;
+		//星星移动速度
+		this.alpha = random(2, 10) / 10;
+		count++;
+		stars[count] = this;
+		}
+		Star.prototype.draw = function() {
+		var x = Math.sin(this.timePassed) * this.orbitRadius + this.orbitX,
+		y = Math.cos(this.timePassed) * this.orbitRadius + this.orbitY,
+		twinkle = random(10);
+		if (twinkle === 1 && this.alpha > 0) {
+		this.alpha -= 0.05;
+		} else if (twinkle === 2 && this.alpha < 1) {
+		this.alpha += 0.05;
+		}
+		ctx.globalAlpha = this.alpha;
+		ctx.drawImage(canvas2, x - this.radius / 2, y - this.radius / 2, this.radius, this.radius);
+		this.timePassed += this.speed;
+		}
+		for (var i = 0; i < maxStars; i++) {
+		new Star();
+		}
+		function animation() {
+		ctx.globalCompositeOperation = 'source-over';
+		ctx.globalAlpha = 0.5; //尾巴
+		ctx.fillStyle = 'hsla(' + hue + ', 64%, 6%, 2)';
+		ctx.fillRect(0, 0, w, h)
+		ctx.globalCompositeOperation = 'lighter';
+		for (var i = 1, l = stars.length; i < l; i++) {
+		stars[i].draw();
+		};
+		window.requestAnimationFrame(animation);
+		}
+		animation();
+		</script>
+</HTML>

@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html  xmlns:th="http://www.thymeleaf.org">
+<script language="javascript" type="text/javascript" th:src="@{/js/jquery-1.7.2.min.js}"></script>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script  type="text/javascript" >
+   $(function (){
+       $("#refundMoney").click(function (){
+           var refund = $("#refund").val();
+           alert(refund)
+           $.ajax({
+               url:"http://127.0.0.1:8090/api/wx-refund/refundOrderNo",
+               data:{
+                   "orderNo":refund
+               },
+               success:function (data){
+                   alert(data)
+               },
+               error:function (){
+                   alert("系统繁忙")
+               }
+           })
+
+
+       })
+   })
+</script>
+ <input th:id="refund"/>
+<button th:id="refundMoney" onclick="init()">退款</button>
+</body>
+</html>
