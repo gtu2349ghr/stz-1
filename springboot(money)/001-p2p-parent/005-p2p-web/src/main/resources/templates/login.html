@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="keywords" content="神耀金融，全网最值得信赖的投资机构" />
+<meta name="description" content="神耀金融，值得选择"/>
+<title>登录神耀金融</title>
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+<script language="javascript" type="text/javascript" th:src="@{/js/jquery-1.7.2.min.js}"></script>
+<script language="javascript" type="text/javascript" th:src="@{/js/jQuery.md5.js}"></script>
+    <script language="javascript" th:src="@{/js/leftTime.min.js}"></script>
+<script language="javascript" type="text/javascript" th:src="@{/js/login.js}"></script>
+</head>
+
+<body>
+<!--页头start-->
+<div id="header">
+    <div th:include="commons/header :: html"></div>
+</div>
+<!--页头end-->
+
+<div class="login-body">
+  <div class="mainBox">
+    <div class="homeWap">
+      <div class="login-cnt clearfix">
+        <div class="login-form">
+		     <h2>欢迎登录</h2>
+		     
+		     <div class="login-box clearfix" style="z-index:10;">
+		     <label>账号</label>
+		     	<input id="phone" name="phone" type="text" class="input_text" placeholder="请输入11位手机号码" maxlength="11"/>
+                 <span id="phoneOk" class="ok" style="display:none;"></span>
+                 <div id="phoneErr" class="form-hint" style="display:none;"></div>
+             </div>
+		     
+		     <div class="login-box clearfix" style="z-index:8; padding-bottom:0px;">
+		     <label>密码</label>
+		     	<input id="loginPassword" name="loginPassword" type="password" placeholder="请输入登录密码" class="input_text" maxlength="16"/>
+                <div >
+                    <span id="loginPasswordOk" class="ok" style="display:none;"></span>
+                    <div id="loginPasswordErr" class="form-hint" style="display:none;z-index:90;"></div>
+                </div>
+
+		     </div>
+<!--验证码-->
+<script type="text/javascript">
+    function getVerifiCode() {
+        $("#yzm_img").prop('src','/p2p/getVerifiCode?a='+new Date().getTime());
+    }
+</script>
+<!--            <div style="display: flex">-->
+<!--                <input type="text" id="migtext" name="migtext" placeholder="请输入验证码" style="border: 1px solid buttonface;height: 25px;left: 83px;top: 10px;position: relative"/>-->
+<!--                <a href="javascript:getVerifiCode()">-->
+<!--                    <img id="yzm_img" style="cursor:pointer;width: 100px;height: 36px;left:130px;top:5px;border-radius: 3px; position: relative" title="点击刷新验证码" src="/p2p/getVerifiCode"/>-->
+<!--                </a>-->
+<!--                <span id="migtextOk" class="ok" style="display:none;"></span>-->
+<!--                <div id="migtextErr" class="form-hint" style="display:none;"></div>-->
+<!--            </div>-->
+            <div class="login-box clearfix" style="z-index:60;">
+                                <input type="text" id="migtext" name="migtext"  class="yzm" placeholder="请输入验证码" style="border: 1px solid buttonface;height: 30px;width:150px;left: 83px;top: 20px;position: relative"/>
+                                <a href="javascript:getVerifiCode()">
+                                    <img id="yzm_img" style="cursor:pointer;width: 100px;height: 36px;left:110px;top:20px;border-radius: 3px; position: relative" title="点击刷新验证码" src="/p2p/getVerifiCode"/>
+                                </a>
+                                <span id="migtextOk" class="ok" style="display:none;"></span>
+                                <div id="migtextErr" class="form-hint" style="display:none;top: 70px"></div>
+            </div>
+
+
+
+
+		     
+		     <div class="bn-login" id="loginId"><button id="loginBtn">登&nbsp;&nbsp;录</button></div>
+    	</div>
+    	
+        <div class="login-right">
+          <div class="login-boy"></div>
+          <div class="top-txt">
+		         神耀金融网，你的不二首选
+			<br/><br/>
+			加入神耀金融网<br/>坐享12.7%历史年化收益
+          </div>
+           
+          <div th:class="currently">
+          	平台用户数：<span id="user" th:text="${user}">--</span>位，累计成交额： <span id="gold" th:text="${money}">--</span>万元
+          </div>
+          
+          <div class="bn-reg" id="quickRegBtn">
+          </div>
+          
+           <ul class="clearfix">
+            <li><i></i>
+              <h3>优选投资计划</h3>
+              <p>
+              	历史年化收益<span>12.7%</span><br/> 投资周期<span>1-12月</span>灵活选择
+              </p>
+            </li>
+            <li class="jpsb"><i></i>
+              <h3>优质借款</h3>
+              <p>
+              	投资周期短<br/>安全计划
+              </p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--页脚start-->
+<!--<div th:include="commons/footer :: html"></div>-->
+<!--页脚end-->
+</body>
+</html>

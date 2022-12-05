@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="99biil-Demo:war">
+    <output-path>$PROJECT_DIR$/001-p2p-parent/99biil-Demo/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>99biil-Demo</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="99biil-Demo-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="99biil-Demo:war exploded" />
+    </root>
+  </artifact>
+</component>

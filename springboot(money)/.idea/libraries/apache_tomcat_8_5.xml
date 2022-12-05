@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="apache-tomcat-8.5">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../../../tomcat8.5.3/apache-tomcat-8.5.83" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../../../tomcat8.5.3/apache-tomcat-8.5.83/webapps/docs/appdev/sample/src" />
+      <root url="file://$PROJECT_DIR$/../../../tomcat8.5.3/apache-tomcat-8.5.83/webapps/examples/WEB-INF/classes" />
+    </SOURCES>
+  </library>
+</component>
