@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<!--    <meta name="keywords" content="动力金融网，投资理财，P2P理财，互联网金融，投资理财，理财，网络贷款，个人贷款，小额贷款，网络投融资平台, 网络理财, 固定收益, 100%本息保障"/>-->
+<!--    <meta name="description" content="动力金融网-专业的互联网金融平台！预期年化收益可高达13%，第三方资金托管，屡获大奖。"/>-->
+    <title>龙函电子商务</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/center.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fund-guanli.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/base.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/security.css}"/>
+    <script type="text/javascript" language="javascript" th:src="@{/js/qrcode.js}"></script>
+    <script type="text/javascript" language="javascript" th:src="@{/js/jquery-1.7.2.min.js}"></script>
+    <script type="text/javascript" language="javascript" th:src="@{/js/trafficStatistics.js}"></script>
+    <script language="javascript" th:src="@{/js/leftTime.min.js}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#overView").removeClass("on");
+            $("#myAccount").addClass("on");
+            $('#chongzhi').addClass('on');
+
+            //选择第三种支付方式
+            $('#bill').click(function () {
+                $(this).addClass('img_on').append("<i></i>");
+                $(this).parent().siblings().children().removeClass('img_on');
+            });
+
+            $('#yibao').click(function () {
+                $(this).addClass('img_on').append("<i></i>");
+                $(this).parent().siblings().children().removeClass('img_on');
+            });
+        });
+
+        function checkData() {
+            var alipay = $("#bill").hasClass("img_on");
+            var weixinpay = $("#yibao").hasClass("img_on");
+            if (alipay == false && weixinpay == false) {
+                $("#p1_1").html(" 请选择支付平台");
+                $(".input_text").addClass("input-red");
+                $("#div1_1").show();
+                return false;
+            }
+            var doubleType = /^-?\d+\.?\d{0,3}$/;
+            var rechargeMoney = $("#rechargeMoney").val();
+            if (rechargeMoney == "") {
+                $("#p1_1").html("请输入充值金额");
+                $(".input_text").addClass("input-red");
+                $("#div1_1").show();
+                return false;
+            } else if (!doubleType.test(rechargeMoney)) {
+                $("#p1_1").html("充值金额最多有两位小数");
+                $(".input_text").addClass("input-red");
+                $("#div1_1").show();
+                return false;
+            } else {
+                $(".input_text").removeClass("input-red");
+                $("#div1_1").hide();
+                return true;
+            }
+        }
+        $(function (){
+         $("#qrCodeDiv").hide();
+        })
+        //提交表单前验证表单数据
+        function submitForm() {
+            if (checkData()) {
+                $(".input_text").removeClass("input-red");
+                $("#div1_1").hide();
+                $("#dialog-overlay").show();
+                $("#failurePayment").show();
+                //然后进行下单
+              var money=  $.trim($("#rechargeMoney").val());
+             $.ajax({
+                 url:"http://127.0.0.1:8090/api/wx-pay/native",
+                 data:{"money":money},
+                 type:"post",
+                 success:function (date){
+                    if(date.code=="0"){
+                        $("#qrCodeDiv").show();
+                        var url=date.data.codeUrl;
+                        // var url = '';//可带参数，二维码一次有效可以通过校验token实现
+                        $("#QRCodeUrlSpanDiv").hide();
+                        $("#qrUrl").hide();
+                        if (url != undefined && url != ""){
+                            $("#qrUrl").html("");
+                            $("#QRCodeUrlSpanDiv").show();
+                            $("#qrUrl").show();
+                            var qrCode = new QRCode("qrUrl", {width: 160, height: 160});
+                            qrCode.makeCode(url);
+                        }
+
+                        // $("#signQRCodeDiv").modal({backdrop: 'static'});
+                   // 定时器定时查单
+                            var interval = setInterval(function (){
+                                var orderNo = date.data.orderNo;
+                             $.ajax({
+                                 url:"/api/wx-pay/cheackNo",
+                                 data: {
+                                     "orderNo":orderNo,
+                                 },
+                                 success:function (dates){
+                                     if(dates.code==1){
+                                         //支付成功让标签显示
+                                         showHidden("near")
+                                         function showHidden(id){
+                                             document.getElementById(id).style.display="";
+                                         }
+                                         // $.leftTime(3,function (d){
+                                         //     document.getElementById("near").innerText("支付成功，页面"+d.s+"秒后跳转首页")
+                                         // })
+                                         $.leftTime(5,function (d){
+                                             if(d.status){
+                                                 document.getElementById("near").innerText="支付成功"+d.s+"秒后跳转首页"
+                                             }else {
+                                                 document.getElementById("near").innerText=""
+                                                 clearInterval(interval)
+                                                 window.location.href="/return"
+                                             }
+                                         })
+                                     }
+                                 },error:function (){
+                                     alert("网络原因请稍后再试")
+                                 }
+                             })
+
+                            },3000);//返回的结果用来清楚定时器
+
+
+
+
+
+
+
+
+                 }
+                 },error:function (){
+                     alert("请求失败")
+                 }
+             })
+             //    $("#rechargeForm").submit();
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+
+<!--页头start-->
+<div id="header">
+    <div th:include="commons/header :: html"></div>
+</div>
+<!--页头end-->
+<input type="hidden" th:value="0" id="num"/>
+<!-- 二级导航栏start -->
+<div th:include="commons/subNav :: html"></div>
+<!-- 二级导航栏end -->
+
+<!--页中start-->
+<div class="mainBox">
+    <div class="homeWap">
+        <div class="fund-guanli clearfix">
+            <div class="left-nav">
+                <div th:include="commons/leftNav :: html"></div>
+            </div>
+
+            <div class="right-body">
+                <div class="leftTitle"><span class="on">感谢您对我们的支持</span></div>
+
+                <!--未认证start-->
+                    <!--<div class="unrecognized" style="display:block;" id="unrecognized1">
+                        <h3>您尚未通过实名认证，通过实名认证后可进行充值操作</h3>
+                        <a class="input_btn" th:href="@{/loan/page/realName}">认 证</a>
+                    </div>-->
+                <!--未认证end-->
+
+                <!-- 充值start -->
+                    <form id="rechargeForm" th:action="@{/loan/toRecharge}" method="post" target="_blank">
+                        <div class="payInvest" style="display:block;">
+                            <div class="investMain">
+                                <h3> -----------------------------------小主们喜欢就赞赏一下哦-------------------------------</h3>
+                                <div class="investContent">
+                                    <div class="investOver clearfix" id="banks2">
+                                        <label>
+                                            <div class="img_cnt" id="bill">
+<!--                                                <img th:src="@{/images/99bill.png}"/>-->
+                                            </div>
+                                        </label>
+                                        <label>
+                                            <div class="img_cnt" id="yibao">
+                                                <img th:src="@{/images/weixinpay.jpg}"/>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="investFooter clearfix">
+                                <h3>请输入金额</h3>
+                                <div class="inputTxt">
+                                    <input type="text" name="rechargeMoney" id="rechargeMoney" value=""
+                                           class="input_text" onblur="checkData()"/>
+                                    <span class="input-yuan">元</span>
+                                    <div class="error-hint" style="display:none" id="div1_1"><i></i>
+                                        <p id="p1_1">金额必须是大于1的正数，且最多有两位小数</p></div>
+                                </div>
+                                <button id="action_1" type="button" onclick="submitForm()">支&nbsp;&nbsp;付</button>
+                            </div>
+                            <div class="tips">
+                                <h3>小函语录</h3>
+                                <p>1. 非常感谢小主们的支持，小函对此万分感谢<br/>
+                                    2.感谢小主们的长期陪伴，龙函会继续陪伴大家哦！<br/>
+                                    3.大家喜欢就好，打赏什么的就随意啦！嘿嘿</p>
+                                <br/>
+                            </div>
+                        </div>
+                    </form>
+                <!-- 充值end -->
+            </div>
+        </div>
+    </div>
+</div>
+<!--页中end-->
+
+<!--遮罩层-->
+<div class="dialog-overlay" id="dialog-overlay" style="display:none;"></div>
+
+<!--支付start-->
+<div class="layer-body failureSuccess failurePayment" id="failurePayment"
+     style="display:none;width:500px;height:380px;top:65%;background-color: #f5f5dc">
+<!--    <a class="layer-close" th:href="@{/loan/page/toRecharge}"></a>-->
+<!--    <div class="layer-top" style="background:#3cbe9b;height:105px;">支付</div>-->
+<!--    <div class="layerBottom">-->
+<!--        <div class="txt-cnt">请在新打开的页面上完成支付，<br/>由于第三方支付渠道问题，所以偶尔存在到账延迟的情况<br/>如没有及时到账，请您等候几分钟或联系客服 400-880-0000。</div>-->
+<!--        <div class="failureClose clearfix">-->
+<!--            <a class="fl" th:href="@{/loan/page/toRecharge}">支付遇到问题<br/>重新支付</a>-->
+<!--            <a class="fr" th:href="@{/loan/myRecharge}">支付完成</a>-->
+<!--        </div>-->
+<!--    </div>-->
+    <div id="qrCodeDiv2" data-type="awf-dialog" style="border-color: #666666 ;">
+<!--        <div class="page">-->
+<!--&lt;!&ndash;            <div class="header">二维码</div>&ndash;&gt;-->
+<!--&lt;!&ndash;            <div class="body">&ndash;&gt;-->
+<!--                <div id="QRCodeUrlSpanDiv">-->
+                    <span style="text-align: center;display:block;margin-top:10px;font-size: 15px"> 请扫描以下二维码：</span>
+                </div>
+                <div id="qrUrl" style="width: 160px; height: 160px; margin: 10px auto 0px; margin-top:45px" ></div>
+    <div class="foote1 " style="background-color: #666666;height: 50px;width: 500px; margin-top:60px;">
+        <!--                <div data-type="awf-container" data-inline="true">-->
+        <!--                    <button data-type="awf-button" data-align="center"-->
+        <!--                            onclick="javascript:;">&nbsp;关&nbsp;&nbsp;闭&nbsp;-->
+        <!--                    </button>-->
+        <span id="near" style="display: none;font-size: 15px;color: #1bb2ea; margin-left: 160px">支付成功即将跳转首页...</span>
+        <a class="fr" style="color: #1bb2ea; display: flex; line-height:50px ;font-size: 15px" th:href="@{/loan/page/toRecharge}">支付完成</a>
+    </div>
+            </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--支付end-->
+<!--弹窗二维码-->
+
+<!--页脚start-->
+<!--<div th:include="commons/footer :: html"></div>-->
+<!--页脚end-->
+</body>
+</html>
