@@ -79,15 +79,14 @@ public class WxPayConfig {
     public  Verifier getPayVerfire() throws NotFoundException, HttpCodeException, GeneralSecurityException, IOException {
         // 获取证书管理器实例
         CertificatesManager  certificatesManager = CertificatesManager.getInstance();
-// 向证书管理器增加需要自动更新平台证书的商户信息
+      // 向证书管理器增加需要自动更新平台证书的商户信息
         //添加了商户id，商户序列号，和商户私钥
-        String privateKeyPath = getPrivateKeyPath();
-        PrivateKey privateKey = getPrivateKey(privateKeyPath);
-        //私钥签名对象
-        PrivateKeySigner privateKeySigner = new PrivateKeySigner(mchSerialNo, privateKey);
+         String privateKeyPath = getPrivateKeyPath();
+           PrivateKey privateKey = getPrivateKey(privateKeyPath);
+           //私钥签名对象
+         PrivateKeySigner privateKeySigner = new PrivateKeySigner(mchSerialNo, privateKey);
         //身份认证对象
-        WechatPay2Credentials wechatPay2Credentials = new WechatPay2Credentials(mchId, privateKeySigner);
-
+           WechatPay2Credentials wechatPay2Credentials = new WechatPay2Credentials(mchId, privateKeySigner);
         certificatesManager.putMerchant(mchId,wechatPay2Credentials , apiV3Key.getBytes(StandardCharsets.UTF_8));
         // 从证书管理器中获取verifier
         Verifier verifier = certificatesManager.getVerifier(mchId);

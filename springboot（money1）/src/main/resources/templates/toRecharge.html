@@ -72,13 +72,14 @@
                 //然后进行下单
               var money=  $.trim($("#rechargeMoney").val());
              $.ajax({
-                 url:"http://127.0.0.1:8090/api/wx-pay/native",
+                 url:"/api/wx-pay/native",
                  data:{"money":money},
                  type:"post",
+                 dataType:"json",
                  success:function (date){
                     if(date.code=="0"){
                         $("#qrCodeDiv").show();
-                        var url=date.data.codeUrl;
+                        var url=date.codeUrl;
                         // var url = '';//可带参数，二维码一次有效可以通过校验token实现
                         $("#QRCodeUrlSpanDiv").hide();
                         $("#qrUrl").hide();
@@ -93,7 +94,7 @@
                         // $("#signQRCodeDiv").modal({backdrop: 'static'});
                    // 定时器定时查单
                             var interval = setInterval(function (){
-                                var orderNo = date.data.orderNo;
+                                var orderNo = date.orderNo;
                              $.ajax({
                                  url:"/api/wx-pay/cheackNo",
                                  data: {
@@ -125,14 +126,6 @@
                              })
 
                             },3000);//返回的结果用来清楚定时器
-
-
-
-
-
-
-
-
                  }
                  },error:function (){
                      alert("请求失败")
@@ -251,7 +244,7 @@
         <!--                            onclick="javascript:;">&nbsp;关&nbsp;&nbsp;闭&nbsp;-->
         <!--                    </button>-->
         <span id="near" style="display: none;font-size: 15px;color: #1bb2ea; margin-left: 160px">支付成功即将跳转首页...</span>
-        <a class="fr" style="color: #1bb2ea; display: flex; line-height:50px ;font-size: 15px" th:href="@{/loan/page/toRecharge}">支付完成</a>
+        <a class="fr" style="color: #1bb2ea; display: flex; line-height:50px ;font-size: 15px" th:href="@{/return}">支付完成</a>
     </div>
             </div>
 

@@ -44,6 +44,7 @@ private CloseableHttpClient PayClient;
     RechargerecordService rechargerecordService;
 @Reference(interfaceClass = RechargeRecordMapper.class,version = "1.0.0")
    private RechargeRecordMapper rechargeRecordMapper;
+    @Override
     @SneakyThrows
     public Map<String, Object> payOrder(Double money, User user) {
 //       Double money1=money*100;

@@ -168,7 +168,7 @@ public class WxPayController {
            throw new Exception("平台通知响应失败",e);
         }
     }
-    @RequestMapping("")
+    @RequestMapping("cheackNo")
     public String querryOrderNo(String orderNo) throws IOException {
         log.info("开始查单,这是查询订单接口");
         WxpayService wxpayService= ApplicationContextUtil.getBean(WxpayService.class);

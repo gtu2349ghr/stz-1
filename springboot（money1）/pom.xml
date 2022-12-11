@@ -6,6 +6,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.6.0</version>
+
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.bjpowernode</groupId>
@@ -34,11 +35,6 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.10</version>
-        </dependency>
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -74,6 +70,10 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
         <!--        httpclient微信支付sd依赖-->
         <dependency>
             <groupId>com.github.wechatpay-apiv3</groupId>
@@ -98,7 +98,13 @@
                     <artifactId>junit-vintage-engine</artifactId>
                 </exclusion>
             </exclusions>
+
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
 
     </dependencies>
     <dependencyManagement>
@@ -106,7 +112,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot.version}</version>
+                <version>2.6.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -121,20 +127,32 @@
                     <include>**/*.pem</include>
                     <include>**/*.cer</include>
                 </includes>
+
             </resource>
+
+
         </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
                 <configuration>
-                    <source>7</source>
-                    <target>7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.6.0</version>
+            </plugin>
+
         </plugins>
-
-
+        <!-- 打包所有jar包 -->
     </build>
 
 </project>

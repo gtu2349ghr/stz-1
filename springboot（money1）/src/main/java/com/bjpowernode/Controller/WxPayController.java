@@ -3,7 +3,6 @@ package com.bjpowernode.Controller;
 import com.bjpowernode.Config.ApplicationContextUtil;
 import com.bjpowernode.Config.WxPayConfig;
 import com.bjpowernode.Vo.Result;
-import com.bjpowernode.springboot.cons.Constans;
 import com.bjpowernode.srevice.WxpayService;
 import com.bjpowernode.utils.HttpUtils;
 import com.google.gson.Gson;
@@ -14,7 +13,6 @@ import com.wechat.pay.contrib.apache.httpclient.notification.NotificationRequest
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,10 +29,8 @@ import java.util.Map;
 @CrossOrigin
 @RestController
 @Slf4j
-@RequestMapping("api/wx-pay")
+@RequestMapping("/api/wx-pay")
 public class WxPayController {
-   @Resource
-    RedisTemplate<String,Object> redisTemplate;
     //这里注入验签器。获得平台证书
 @Resource
   private WxpayService vxpayService;
@@ -51,21 +47,22 @@ public class WxPayController {
         return Result.ok();
     }
     @RequestMapping("native")
-    public Result Vxpay(@RequestParam(value = "money") Double money
+    public Map Vxpay(@RequestParam(value = "money") Double money
                         ){
         //这里调用service
         //下单功能，返回二维码连接和订单号
         System.out.println(money);
         //获取用户的id
-        log.info(money+"这是money");
+        HashMap<String, Object> map1 = new HashMap<>();
         Map<String,Object> map= vxpayService.payOrder(money);
-        log.info("发起支付");
-        log.info((String) map.get("orderNo"));
 //        HashMap<String, Object> map1 = new HashMap<>();
 //        map1.put("codeUrl",map.get("codeUrl"));
 //        System.out.println(map.get("codeUrl"));
 //        return Result.ok().setData(map);
-        return Result.ok().setData(map);
+        map1.put("codeUrl",map.get("codeUrl"));
+        map1.put("code","0");
+        map1.put("orderNo",map.get("orderNo"));
+        return map1;
 //        return Result.ok();
     }
 
@@ -146,8 +143,7 @@ public class WxPayController {
     @RequestMapping("cheackNo")
     public Map querryOrderNo(String orderNo) throws IOException {
         log.info("开始查单,这是查询订单接口");
-        WxpayService wxpayService= ApplicationContextUtil.getBean(WxpayService.class);
-        String responboy= wxpayService.querryOrderNo(orderNo);
+        String responboy= vxpayService.querryOrderNo(orderNo);
         HashMap<String, Object> map = new HashMap<>();
         if(responboy.equals("SUCCESS")){
             map.put("code",1);

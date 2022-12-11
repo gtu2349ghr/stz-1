@@ -8,7 +8,10 @@ public class aaaController {
     public String aaa(){
         return "toRecharge";
     }
-
+    @RequestMapping("/index")
+    public String index(){
+        return "toRecharge";
+    }
     @RequestMapping("/return")
     public String return1(){
         return "toRecharge";
