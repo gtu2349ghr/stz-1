@@ -1,0 +1,20 @@
+server:
+  port: 5001
+spring:
+  application:
+    name: 004-zuul
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:6001/eureka,http://localhost:6002/eureka
+zuul:
+  routes:
+    toBaidu:
+      path: /
+      url: https://www.baidu.com
+    to8001:
+      path: /consumer/**
+      url: http://localhost:8001
+
+

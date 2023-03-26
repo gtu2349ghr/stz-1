@@ -1,0 +1,20 @@
+server:
+  port: 7001
+spring:
+  application:
+    #微服务名称
+    name: 003-eureka-client-provider
+eureka:
+  instance:
+    #以ip命名
+   prefer-ip-address: true
+   #心跳交互的时间
+   lease-renewal-interval-in-seconds: 30
+   #超时后剔除列表的时间
+   lease-expiration-duration-in-seconds: 30
+  client:
+    #微服务注册中心的地址
+    #这里配置多个结点的意义是，如果6001如果故障的话那么6002还可以连接
+    service-url:
+      defaultZone: http://localhost:6001/eureka,http://localhost:6002/eureka
+

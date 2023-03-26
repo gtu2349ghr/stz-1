@@ -1,0 +1,16 @@
+server:
+  port: 6002
+eureka:
+  server:
+    #关闭自我保护机制
+    enable-self-preservation: false
+  client:
+    service-url:
+      defaultZone: http://localhost:6001/eureka
+    fetch-registry: false
+    register-with-eureka: false
+
+spring:
+  cloud:
+    inetutils:
+      timeout-seconds: 10
