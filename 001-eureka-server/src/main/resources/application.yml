@@ -1,0 +1,17 @@
+#注册中心的端口号
+server:
+  port: 6001
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:6002/eureka
+    fetch-registry: false
+    register-with-eureka: false
+    #关闭eureka的自我保护机制
+  server:
+    enable-self-preservation: false
+
+spring:
+  cloud:
+    inetutils:
+      timeout-seconds: 10
